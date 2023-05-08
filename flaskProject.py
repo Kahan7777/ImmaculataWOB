@@ -16,6 +16,7 @@ firebase = pyrebase.initialize_app(config)
 db = firebase.database()
 
 def schBuyStock(school,stock,amt):
+    print("buy")
     #currentStockBalance = db.child("Schools").child(school).child(stock).get().val()
     #currentStockBalance = db.child("Schools").child(school).child(stock+"").get().val()
     costOfStock = db.child("Stocks").child(stock).child("CurrentPrice").get().val()
@@ -49,6 +50,7 @@ def schBuyStock(school,stock,amt):
         else:
             print("Action cannot be performed")
 def schSellStock(school,stock,amt):
+    print("sell")
     #currentStockBalance = db.child("Schools").child(school).child(stock).get().val()
     #currentStockBalance = db.child("Schools").child(school).child(stock+"").get().val()
     costOfStock = db.child("Stocks").child(stock).child("CurrentPrice").get().val()
@@ -85,6 +87,8 @@ def manageStocks(name,password,option,stock,no):
     truePass = school["Password"]
     if int(password)==int(truePass):
         isAuth=True
+    if no<0:
+        isAuth=False
     if isAuth:
         if int(option) == 1:   
             schBuyStock(name,stock,int(no))
@@ -103,6 +107,7 @@ def home():
         stockName = request.form["stock"]
         noOfStocks = request.form["noOfStocks"]
         manageStocks(schoolName,schoolPassword,buyOrSell,stockName,noOfStocks)
+        print("Ok")
         return render_template("main.html") 
 if __name__=="__main__":
     app.run(debug=True)
