@@ -87,7 +87,7 @@ def manageStocks(name,password,option,stock,no):
     truePass = school["Password"]
     if int(password)==int(truePass):
         isAuth=True
-    if no<0:
+    if int(no)<0:
         isAuth=False
     if isAuth:
         if int(option) == 1:   
