@@ -27,8 +27,7 @@ def schBuyStock(school,stock,amt):
     stockVolatility = db.child("Stocks").child(stock).child("Volatility").get().val()
     history = db.child("Stocks").child(stock).child("History").get().val()
     history.append(currentStockPrice)
-    print(history)
-    volatilityInc = 0
+    """volatilityInc = 0
     for i in range(amt+1):
         volatilityInc += i
     print(volatilityInc)
@@ -48,6 +47,25 @@ def schBuyStock(school,stock,amt):
             db.child("Stocks").child(stock).update({"CurrentPrice":currentStockPrice+volatilityInc})
             db.child("Stocks").child(stock).update({"History":history})
         else:
+            print("Action cannot be performed")"""
+    costOfPurchase = 0
+    costOfStockUpdated = costOfStock
+    for i in range(amt):
+        costOfStockUpdated+=stockVolatility
+        costOfPurchase+=costOfStockUpdated
+    averageCost = round(costOfPurchase/amt)
+    if costOfStock<5:
+        db.child("Stocks").child(stock).update({"CurrentPrice":0})
+        db.child("Stocks").child(stock).update({"History":history})
+        db.child("Stocks").child(stock).update({"Volatility":0})
+    else:
+        if moneyInReserve-costOfPurchase>=0:
+            db.child("Schools").child(school).child("Stocks").update({stock:moneyInStock+costOfPurchase})
+            db.child("Schools").child(school).child("StocksActual").update({stock:moneyInStockActual+amt})
+            db.child("Schools").child(school).update({"Money":moneyInReserve-costOfPurchase})
+            db.child("Stocks").child(stock).update({"CurrentPrice":averageCost})
+            db.child("Stocks").child(stock).update({"History":history})
+        else:
             print("Action cannot be performed")
 def schSellStock(school,stock,amt):
     print("sell")
@@ -60,7 +78,7 @@ def schSellStock(school,stock,amt):
     currentStockPrice = db.child("Stocks").child(stock).child("CurrentPrice").get().val()
     stockVolatility = db.child("Stocks").child(stock).child("Volatility").get().val()
     history = db.child("Stocks").child(stock).child("History").get().val()
-    flatStop=costOfStock*amt/(stockVolatility+3)
+    """flatStop=costOfStock*amt/3
     history.append(currentStockPrice)
     volatilityInc = 0
     for i in range(amt+1):
@@ -78,6 +96,25 @@ def schSellStock(school,stock,amt):
             db.child("Schools").child(school).child("StocksActual").update({stock:moneyInStockActual-amt})
             db.child("Schools").child(school).update({"Money":moneyInReserve+costOfStock*amt-volatilityInc-int(flatStop)})
             db.child("Stocks").child(stock).update({"CurrentPrice":currentStockPrice-volatilityInc})
+            db.child("Stocks").child(stock).update({"History":history})
+        else:
+            print("Action cannot be performed")"""
+    returnOnSale = 0
+    costOfStockUpdated = costOfStock
+    for i in range(amt):
+        costOfStockUpdated-=stockVolatility
+        returnOnSale=returnOnSale + costOfStockUpdated
+    averageCost = round(returnOnSale/amt)
+    if costOfStock<5:
+        db.child("Stocks").child(stock).update({"CurrentPrice":0})
+        db.child("Stocks").child(stock).update({"History":history})
+        db.child("Stocks").child(stock).update({"Volatility":0})
+    else:
+        if moneyInStockActual-amt>=0:
+            db.child("Schools").child(school).child("Stocks").update({stock:moneyInStock-returnOnSale})
+            db.child("Schools").child(school).child("StocksActual").update({stock:moneyInStockActual-amt})
+            db.child("Schools").child(school).update({"Money":moneyInReserve+returnOnSale})
+            db.child("Stocks").child(stock).update({"CurrentPrice":averageCost})
             db.child("Stocks").child(stock).update({"History":history})
         else:
             print("Action cannot be performed")
