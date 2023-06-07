@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/main.css') }}">
+    <title>Portfolio</title>
+</head>
+<body>
+    <div class="container">
+        <div class="dark-bg give-width">
+            <h1 class="h11">Portfolio</h1>
+            {% for key, value in values.items()%}
+            <div class="stockContainer">
+                <div class="stockName">
+                    <p class="stockN">{{ key }}</p>
+                </div>
+                <div class="stockValue">
+                    <p class="stockV">{{ value }}</p>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="moneyCont">
+                <p class="money"> Money Not Invested : {{ money }}</p>
+            </div>
+            {% block content %}
+            <form method="post" action="#">
+                <input type="submit" value="Go Back">
+            </form>
+            {% endblock %}
+        </div>
+    </div>
+</body>
+</html>
