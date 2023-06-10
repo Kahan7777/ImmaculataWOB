@@ -17,12 +17,12 @@ db = firebase.database()
 
 def schBuyStock(school,stock,amt):
     print("buy")
-    costOfStock = db.child("Stocks").child(stock).child("CurrentPrice").get().val()
-    moneyInStock = db.child("Schools").child(school).child("Stocks").child(stock).get().val()
-    moneyInStockActual = db.child("Schools").child(school).child("StocksActual").child(stock).get().val()
-    moneyInReserve = db.child("Schools").child(school).child('Money').get().val()
-    currentStockPrice = db.child("Stocks").child(stock).child("CurrentPrice").get().val()
-    stockVolatility = db.child("Stocks").child(stock).child("Volatility").get().val()
+    costOfStock = int(db.child("Stocks").child(stock).child("CurrentPrice").get().val())
+    moneyInStock = int(db.child("Schools").child(school).child("Stocks").child(stock).get().val())
+    moneyInStockActual = int(db.child("Schools").child(school).child("StocksActual").child(stock).get().val())
+    moneyInReserve = int(db.child("Schools").child(school).child('Money').get().val())
+    currentStockPrice = int(db.child("Stocks").child(stock).child("CurrentPrice").get().val())
+    stockVolatility = int(db.child("Stocks").child(stock).child("Volatility").get().val())
     history = db.child("Stocks").child(stock).child("History").get().val()
     history.append(currentStockPrice)
 
@@ -45,15 +45,14 @@ def schBuyStock(school,stock,amt):
             db.child("Stocks").child(stock).update({"History":history})
         else:
             print("Action cannot be performed")
-    return redirect(url_for("portfolio",schoolName=school))
 def schSellStock(school,stock,amt):
     print("sell")
-    costOfStock = db.child("Stocks").child(stock).child("CurrentPrice").get().val()
-    moneyInStock = db.child("Schools").child(school).child("Stocks").child(stock).get().val()
-    moneyInStockActual = db.child("Schools").child(school).child("StocksActual").child(stock).get().val()
-    moneyInReserve = db.child("Schools").child(school).child('Money').get().val()
-    currentStockPrice = db.child("Stocks").child(stock).child("CurrentPrice").get().val()
-    stockVolatility = db.child("Stocks").child(stock).child("Volatility").get().val()
+    costOfStock = int(db.child("Stocks").child(stock).child("CurrentPrice").get().val())
+    moneyInStock = int(db.child("Schools").child(school).child("Stocks").child(stock).get().val())
+    moneyInStockActual = int(db.child("Schools").child(school).child("StocksActual").child(stock).get().val())
+    moneyInReserve = int(db.child("Schools").child(school).child('Money').get().val())
+    currentStockPrice = int(db.child("Stocks").child(stock).child("CurrentPrice").get().val())
+    stockVolatility = int(db.child("Stocks").child(stock).child("Volatility").get().val())
     history = db.child("Stocks").child(stock).child("History").get().val()
     returnOnSale = 0
     costOfStockUpdated = costOfStock
@@ -121,29 +120,33 @@ def error(eMess1,eMess2):
 @app.route("/portfolio/<schoolName>",methods=["POST","GET"])
 def portfolio(schoolName):
     if request.method=="GET":
-        print("Yeee")
-        schoolMoney = db.child("Schools").child(schoolName).child("Money").get().val()
-        schoolStocks = db.child("Schools").child(schoolName).child("StocksActual").get()
-        allStockNames = [
-            "Burrmanfabrics",
-            "GENOFoods",
-            "GoliathBanks",
-            "NPCTech",
-            "NatFuels",
-            "WrightAirlines",
-            "aquaFortis",
-            "buildScape",
-            "healthQuest",
-            "ignitedMinds",
-            "prasiddhiAutos"
-        ]
-        i=0
-        allStocks = {}
-        for stock in schoolStocks.each():
-            allStocks[allStockNames[i]]=stock.val()
-            i=i+1
-        print(allStocks)
-        return render_template("portfolio.html",values=allStocks,money=schoolMoney)
+        try:
+            print("Yeee")
+            print(schoolName)
+            schoolMoney = db.child("Schools").child(schoolName).child("Money").get().val()
+            schoolStocks = db.child("Schools").child(schoolName).child("StocksActual").get()
+            allStockNames = [
+                "Burrmanfabrics",
+                "GENOFoods",
+                "GoliathBanks",
+                "NPCTech",
+                "NatFuels",
+                "WrightAirlines",
+                "aquaFortis",
+                "buildScape",
+                "healthQuest",
+                "ignitedMinds",
+                "prasiddhiAutos"
+            ]
+            i=0
+            allStocks = {}
+            for stock in schoolStocks.each():
+                allStocks[allStockNames[i]]=stock.val()
+                i=i+1
+            print(allStocks)
+            return render_template("portfolio.html",values=allStocks,money=schoolMoney)
+        except:
+            return redirect(url_for("error", eMess1="404 Error!", eMess2="This aint an actual webpage! Why you trying to do this?"))
     elif request.method=="POST":
         return redirect(url_for("home"))
 @app.route("/", methods=["POST","GET"])
@@ -166,14 +169,51 @@ def home():
         buyOrSell = request.form["typeOfOrder"]
         stockName = request.form["stock"]
         noOfStocks = request.form["noOfStocks"]
-        success = manageStocks(schoolName,schoolPassword,buyOrSell,stockName,noOfStocks)
+        """success = manageStocks(schoolName,schoolPassword,buyOrSell,stockName,noOfStocks)
         if success is None:
             success= {}
             success["error"]=False
         if success["error"]==True:
             return redirect(url_for("error",eMess1=success["eMess1"],eMess2=success["eMess2"]))
         else:
-            return render_template("main.html")
+            return render_template("main.html")"""
 
+
+        isAuth = False
+        school = db.child("Schools").child(schoolName).get().val()
+        truePass = school["Password"]
+        isAuth2=True
+        errorMessage = {"error":False}
+        try:
+            if int(schoolPassword)==int(truePass):
+                isAuth=True
+        except ValueError:
+            errorMessage["error"] = True
+            errorMessage["eMess1"]="Password not entered!"
+            errorMessage["eMess2"]="Enter the correct password to be able to sell and buy stocks."
+        try:
+            if int(noOfStocks)<0:
+                isAuth2=False
+        except ValueError:
+            errorMessage["error"] = True
+            errorMessage["eMess1"]="Number. of Stocks is not true"
+            errorMessage["eMess2"]="Enter a valid number of stocks to be able to sell and buy stocks."
+        if isAuth2==False:
+            errorMessage["error"] = True
+            errorMessage["eMess1"]="Value must be above 0"
+            errorMessage["eMess2"]="Enter a valid number of stocks to be able to sell and buy stocks."
+        if isAuth:
+            if int(buyOrSell) == 1:   
+                schBuyStock(schoolName,stockName,int(noOfStocks))
+
+            elif int(buyOrSell) == 2:
+                schSellStock(schoolName,stockName,int(noOfStocks))
+            return redirect(url_for("portfolio",schoolName=schoolName))
+        else:
+            print("notAuth")
+            errorMessage["error"] = True
+            errorMessage["eMess1"]="Correct Password not entered!"
+            errorMessage["eMess2"]="Enter the correct password to be able to sell and buy stocks."
+            return redirect(url_for("error",eMess1=errorMessage["eMess1"],eMess2=errorMessage["eMess2"]))
 if __name__=="__main__":
     app.run(debug=True)
