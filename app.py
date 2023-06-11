@@ -32,10 +32,11 @@ def schBuyStock(school,stock,amt):
         costOfStockUpdated+=stockVolatility
         costOfPurchase+=costOfStockUpdated
     averageCost = round(costOfPurchase/amt)
-    if costOfStock<5:
+    if averageCost<5:
         db.child("Stocks").child(stock).update({"CurrentPrice":0})
         db.child("Stocks").child(stock).update({"History":history})
         db.child("Stocks").child(stock).update({"Volatility":0})
+        performed=False
     else:
         if moneyInReserve-costOfPurchase>=0:
             db.child("Schools").child(school).child("Stocks").update({stock:moneyInStock+costOfPurchase})
@@ -62,10 +63,11 @@ def schSellStock(school,stock,amt):
         costOfStockUpdated-=stockVolatility
         returnOnSale=returnOnSale + costOfStockUpdated
     averageCost = round(returnOnSale/amt)
-    if costOfStock<5:
+    if averageCost<5:
         db.child("Stocks").child(stock).update({"CurrentPrice":0})
         db.child("Stocks").child(stock).update({"History":history})
         db.child("Stocks").child(stock).update({"Volatility":0})
+        performed=False
     else:
         if moneyInStockActual-amt>=0:
             db.child("Schools").child(school).child("Stocks").update({stock:moneyInStock-returnOnSale})
