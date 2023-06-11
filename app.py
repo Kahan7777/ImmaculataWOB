@@ -22,7 +22,7 @@ def schBuyStock(school,stock,amt):
     moneyInStockActual = int(db.child("Schools").child(school).child("StocksActual").child(stock).get().val())
     moneyInReserve = int(db.child("Schools").child(school).child('Money').get().val())
     currentStockPrice = int(db.child("Stocks").child(stock).child("CurrentPrice").get().val())
-    stockVolatility = int(db.child("Stocks").child(stock).child("Volatility").get().val())
+    stockVolatility = float(db.child("Stocks").child(stock).child("Volatility").get().val())
     history = db.child("Stocks").child(stock).child("History").get().val()
     history.append(currentStockPrice)
 
@@ -43,8 +43,10 @@ def schBuyStock(school,stock,amt):
             db.child("Schools").child(school).update({"Money":moneyInReserve-costOfPurchase})
             db.child("Stocks").child(stock).update({"CurrentPrice":averageCost})
             db.child("Stocks").child(stock).update({"History":history})
+            performed=True
         else:
-            print("Action cannot be performed")
+            performed=False
+    return performed
 def schSellStock(school,stock,amt):
     print("sell")
     costOfStock = int(db.child("Stocks").child(stock).child("CurrentPrice").get().val())
@@ -52,7 +54,7 @@ def schSellStock(school,stock,amt):
     moneyInStockActual = int(db.child("Schools").child(school).child("StocksActual").child(stock).get().val())
     moneyInReserve = int(db.child("Schools").child(school).child('Money').get().val())
     currentStockPrice = int(db.child("Stocks").child(stock).child("CurrentPrice").get().val())
-    stockVolatility = int(db.child("Stocks").child(stock).child("Volatility").get().val())
+    stockVolatility = float(db.child("Stocks").child(stock).child("Volatility").get().val())
     history = db.child("Stocks").child(stock).child("History").get().val()
     returnOnSale = 0
     costOfStockUpdated = costOfStock
@@ -71,8 +73,11 @@ def schSellStock(school,stock,amt):
             db.child("Schools").child(school).update({"Money":moneyInReserve+returnOnSale})
             db.child("Stocks").child(stock).update({"CurrentPrice":averageCost})
             db.child("Stocks").child(stock).update({"History":history})
+            performed=True
         else:
+            performed=False
             print("Action cannot be performed")
+    return performed
 def manageStocks(name,password,option,stock,no):
     isAuth = False
     school = db.child("Schools").child(name).get().val()
@@ -195,6 +200,7 @@ def home():
             if int(noOfStocks)<0:
                 isAuth2=False
         except ValueError:
+            isAuth2=False
             errorMessage["error"] = True
             errorMessage["eMess1"]="Number. of Stocks is not true"
             errorMessage["eMess2"]="Enter a valid number of stocks to be able to sell and buy stocks."
@@ -203,12 +209,28 @@ def home():
             errorMessage["eMess1"]="Value must be above 0"
             errorMessage["eMess2"]="Enter a valid number of stocks to be able to sell and buy stocks."
         if isAuth:
-            if int(buyOrSell) == 1:   
-                schBuyStock(schoolName,stockName,int(noOfStocks))
-
-            elif int(buyOrSell) == 2:
-                schSellStock(schoolName,stockName,int(noOfStocks))
-            return redirect(url_for("portfolio",schoolName=schoolName))
+            if isAuth2:
+                if int(buyOrSell) == 1:   
+                    perf = schBuyStock(schoolName,stockName,int(noOfStocks))
+                    if perf==False:
+                        errorMessage["error"] = True
+                        errorMessage["eMess1"]="Cannot buy no. of stocks inputed!"
+                        errorMessage["eMess2"]="Enter a valid no. of stocks to be able to buy stocks."
+                        return redirect(url_for("error",eMess1=errorMessage["eMess1"],eMess2=errorMessage["eMess2"]))
+                elif int(buyOrSell) == 2:
+                    perf = schSellStock(schoolName,stockName,int(noOfStocks))
+                    if perf==False:
+                        errorMessage["error"] = True
+                        errorMessage["eMess1"]="Cannot sell more stocks than owned!"
+                        errorMessage["eMess2"]="Enter a valid no. of stocks to be able to sell stocks."
+                        return redirect(url_for("error",eMess1=errorMessage["eMess1"],eMess2=errorMessage["eMess2"]))
+                return redirect(url_for("portfolio",schoolName=schoolName))
+            else:
+                print("notAuth")
+                errorMessage["error"] = True
+                errorMessage["eMess1"]="No. of Stocks Not Provided!"
+                errorMessage["eMess2"]="Enter a valid no. of stocks to be able to sell and buy stocks."
+                return redirect(url_for("error",eMess1=errorMessage["eMess1"],eMess2=errorMessage["eMess2"]))
         else:
             print("notAuth")
             errorMessage["error"] = True
