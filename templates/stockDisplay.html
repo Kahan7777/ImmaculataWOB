@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/main2.css') }}">
+    <title>War of BureauCracy</title>
+</head>
+<body>
+    <div class="stockDisplayCont">
+        <div class="stockDisplayed">
+            {% for xAx in x %}
+                <div class="stockPoint" style="left:{{ xAx }}px; top:{{ y[loop.index0] }}px;"></div>
+            {% endfor %}
+            <!--<h4>Lower Amt - </h4>
+            <h4>Upper Amt - </h4>
+            <h3>Name Of Stock</h3>
+            <h4>Volatility</h4>-->
+        </div>
+    </div>
+</body>
+</html>

@@ -1,5 +1,6 @@
 from flask import Flask, redirect,url_for,render_template,request
 import pyrebase
+import random
 
 config = {
     "apiKey": "AIzaSyBz0ZmNlIwmZXNr0H-frf4ivbSIyIycnOg",
@@ -160,10 +161,46 @@ def portfolio(schoolName):
 def mainrun():
     return redirect(url_for("home"))
 
-
 @app.errorhandler(404)
 def pageNotFound(error):
     return redirect(url_for("home"))
+
+@app.route("/stock/<name>", methods=["POST", "GET"])
+def stock(name):
+    try:
+        allStockNames = [
+            name
+        ]
+        stockList = []
+        currentHighest = 0
+        for i in allStockNames:
+            stockInfo = db.child("Stocks").child(i).get().val()
+            history=stockInfo["History"]
+            history = [int(i) for i in history]
+            c1 = random.randrange(0,255)
+            c2 = random.randrange(0,255)
+            c3 = random.randrange(0,255)
+            if len(history)>currentHighest:
+                currentHighest=len(history)
+            stockList.append({
+                "History":history,
+                "CurrentPrice": stockInfo["CurrentPrice"],
+                "Volatility": stockInfo["Volatility"],
+                "Name":i,
+                "borderColor": f"rgb(250,114,104)"
+            })
+        print(stockList)
+        xAxis = []
+        for j in range(currentHighest):
+            xAxis.append(j)
+        return render_template("stkDisplay2.html",stockList=stockList, xAxis=xAxis)
+    except:
+        return redirect(url_for("error", eMess1="Issue with sourcing information!", eMess2="Contact a volunteer if these messages are repeated."))
+
+@app.route("/stocks")
+def stocks():
+    return render_template("stocks.html")
+
 @app.route("/home", methods=["POST","GET"])
 def home():
     success= {}

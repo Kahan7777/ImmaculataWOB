@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/main2.css') }}">
+    <title>War of BureauCracy</title>
+</head>
+<body>
+    <div class="stockDisplayCont">
+        <div class="stockDisplayed">
+          <canvas id="myChart" style="width:50%;height:50%;"></canvas>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('myChart');
+        const labels  = {{ xAxis }};
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels:labels,
+            datasets: [
+              {% for stock in stockList %}
+                {
+                  label: "{{ stock["Name"] }}",
+                  data: {{ stock["History"] }},
+                  borderWidth: 3,
+                  borderColor: "{{ stock["borderColor"] }}",
+                  hoverBackgroundColor: 'rgb(0,0,0)'
+
+                },
+              {% endfor %}
+            ]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+    </script>
+</body>
+</html>

@@ -1,1 +1,10 @@
-Tell that they cant buy stocks cause its too much
+-Use fishbowl to choose the crisis in WOB Part 1
+-Make 20 chits for WOB 1
+-Make note of which school has what crisis
+-Give places to all volunteers
+-Repeat rules and regulations before each part of the event
+-Have teachers as judges
+-Have a criteria for WOB 1
+-Intro of 2 mins WOB 1
+-Drawing of chits
+-2 minutes of presesntation time WOB 1pygame.display.set_caption('War of Bureaucracy')

@@ -94,6 +94,7 @@ input[type=submit]{
     font-size:18px;
     background-color: #000000;
     margin:10px;
+    margin-bottom: 40px;
     padding:10px 20px;
     border: none;
     border-radius: 4px;
@@ -214,4 +215,11 @@ a{
     background-color: #e73c7e;
     border-radius: 4px;
     border-bottom: 4px solid white;
+}
+.clickable{
+    padding:7px;
+    margin:20px;
+    background-color: #e73c7e;
+    border-radius: 2px;
+    text-decoration: none;
 }
