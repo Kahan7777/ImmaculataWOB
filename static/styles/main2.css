@@ -107,6 +107,9 @@ select:required:invalid {
 }
 .wide2{
     width: 100%;
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    bottom: 0;
 }
 .circle200{
     border-radius: 100%;
@@ -180,14 +183,112 @@ select:required:invalid {
     justify-content: space-around;
     align-content: center;
 }
+.clickabled{
+    text-decoration: none;
+    font-size: 24px;
+    background-color: #001220;
+    width: 80%;
+    margin: 0 10%;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    padding:5px;    
+    color:#FA7268;
+    display: block;
+}
+.moneyCont{
+    margin: 20px;
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    background-color: #FA7268;
+    border-radius: 4px;
+    border-bottom: 4px solid white;
+}
 .clickable{
     padding:7px;
+    margin:20px;
     background-color: #FA7268;
     border-radius: 2px;
+    width:80%;
     text-decoration: none;
+
+}
+.centerify{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.error{
+    color: #001220;
+    font-size: 108px;
+    margin: 0 auto;
+    display: inline;
+}
+h3,h4{
+    text-align: center;
+}
+.portfolioDisplay{
+    width:80%;
+    background-color: #f1f1f1;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    color:#5F6AC9;
+    justify-content: space-around;
+    margin: 0 auto;
+}
+.stockDisplayConte{
+    margin-top: 100px;
+
+}
+.h11{
+    color:#FA7268;
+    text-align: center;
+    padding: 20px;
+    font-size: 72px;
+}
+.stockContainer{
+    background-color: #5F6AC9;
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    padding:10px;
+    margin: 0 auto 15px auto;
+    width:80%;
+    border-radius: 5px;
+}
+.stockV, .stockN{
+    font-size: 20px;
 }
 @media only screen and (max-width: 700px) {
     .stockDisplayed{
         width:90%;
     }
+    .stockDisplayCont{
+        width: 90%;
+    }
+    .gridCols{
+        grid-template-columns: auto auto auto;
+        grid-template-rows: auto auto auto auto;
+    }
+    .warOfBur{
+        width:90%;
+    }
+    .formWrapper{
+        width: 90%;
+    }
+    .doublewrap{
+        margin-top: 275px;
+    }
+    .circle400{
+        top:500px;
+    }
   }
+@media only screen and (max-width:400px){
+    .gridCols{
+        grid-template-columns: auto auto;
+        grid-template-rows: auto auto auto auto auto auto;
+    }
+}

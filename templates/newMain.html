@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/templates/main2.css">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/main2.css')}}">
     <title>War Of Bureaucracy</title>
 </head>
 <body>
-    <img src="/templates/images/topBundle.svg" class="wide" alt="Bring">
+    <img src="{{ url_for('static', filename='images/topBundle.svg')}}" class="wide" alt="Bring">
     <!--<div class="immaculataWrapper">
         <img src="/templates/images/immacBorder2.svg" alt="Border" class="immacBorder">
         <img src="/templates/images/immacBg.svg" alt="" class="immacBg">
@@ -65,14 +65,16 @@
                         </p>
                     </div>
                     <input type="submit" value="Submit">
+                    <div class="links">
+                        <a href="{{ url_for('stocks')}}" class="clickabled">Look At Stocks</a>    
+                    </div>
                 </form>
             </div>
         </div>
     </div>
-    <img src="/templates//images/bottomSvg.svg" alt="Nf" class="wide2">
+    <img src="{{ url_for('static', filename='images/bottomSvg.svg')}}" alt="Nf" class="wide2">
     <div class="circle200"></div>
     <div class="circle400"></div>
     <div class="circle100"></div>
-    <div class="circle300"></div>
 </body>
 </html>

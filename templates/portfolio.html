@@ -8,8 +8,8 @@
     <title>Portfolio</title>
 </head>
 <body>
-    <div class="container">
-        <div class="dark-bg give-width">
+    <div class="stockDisplayConte">
+        <div class="portfolioDisplay">
             <h1 class="h11">Portfolio</h1>
             {% for key, value in values.items()%}
             <div class="stockContainer">
@@ -19,6 +19,9 @@
                 <div class="stockValue">
                     <p class="stockV">{{ value }}</p>
                 </div>
+                <div class="stockValue">
+                    <a href="{{url_for('stock',name=key)}}"> Check Stock Prices</a>
+                </div>
             </div>
             {% endfor %}
             <div class="moneyCont">
@@ -26,7 +29,7 @@
             </div>
             {% block content %}
             <form method="post" action="#">
-                <input type="submit" value="Go Back">
+                <input type="submit" value="Go Back" style="background-color: #001220;">
             </form>
             {% endblock %}
         </div>

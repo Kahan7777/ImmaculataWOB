@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static',filename='styles/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/main2.css') }}">
     <title>An Error Occured!</title>
 </head>
 <body>
-    <div class="container">
-        <div class="dark-bg">
+    <div class="stockDisplayCont">
+        <div class="stockDisplayed centerify" style="background-color: #FA7268;">
             <h1 class="error">Error!</h1>
             <h3>{{ eMess1 }}</h3><h3 class="h3bot">{{ eMess2 }}</h3>
             {% block content %}
-            <form method="post" action="#">
-                <input type="submit" value="Go Back">
+            <form method="post" action="#" style="width:80%">
+                <input type="submit" value="Go Back" style="width:80%" class="clickabled">
             </form>
             {% endblock %}
             <h4>Contact the event head if you are unable to submit a form.</h4>

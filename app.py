@@ -1,6 +1,7 @@
 from flask import Flask, redirect,url_for,render_template,request
 import pyrebase
 import random
+import traceback
 
 config = {
     "apiKey": "AIzaSyBz0ZmNlIwmZXNr0H-frf4ivbSIyIycnOg",
@@ -153,7 +154,8 @@ def portfolio(schoolName):
                 i=i+1
             print(allStocks)
             return render_template("portfolio.html",values=allStocks,money=schoolMoney)
-        except:
+        except Exception:
+            traceback.print_exc()
             return redirect(url_for("error", eMess1="404 Error!", eMess2="This aint an actual webpage! Why you trying to do this?"))
     elif request.method=="POST":
         return redirect(url_for("home"))
@@ -167,6 +169,7 @@ def pageNotFound(error):
 
 @app.route("/stock/<name>", methods=["POST", "GET"])
 def stock(name):
+    print(name)
     try:
         allStockNames = [
             name
@@ -206,7 +209,7 @@ def home():
     success= {}
     success["error"]=False
     if request.method == "GET":
-        return render_template("main.html")
+        return render_template("newMain.html")
     elif request.method == "POST":
         schoolName = request.form["schoolNameDropdown"]
         schoolPassword = request.form["schoolPassword"]
