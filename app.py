@@ -228,9 +228,22 @@ def home():
 
         isAuth = False
         school = db.child("Schools").child(schoolName).get().val()
+        cont = db.child("Controller").get().val()
         truePass = school["Password"]
         isAuth2=True
         errorMessage = {"error":False}
+        try:
+            if cont == False:
+                
+                errorMessage["error"] = True
+                errorMessage["eMess1"]="You are not allowed to enter information currently!"
+                errorMessage["eMess2"]="Ask the event head if this is a reccuring message!"
+                print("yhdsihdai")
+            if cont == True:
+                print("Oiujeufieufdhc")
+            print(cont)
+        except:
+            pass
         try:
             if int(schoolPassword)==int(truePass):
                 isAuth=True

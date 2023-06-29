@@ -14,13 +14,12 @@
             {% for key, value in values.items()%}
             <div class="stockContainer">
                 <div class="stockName">
+                    <a href="{{url_for('stock',name=key)}}">
                     <p class="stockN">{{ key }}</p>
+                    </a>
                 </div>
                 <div class="stockValue">
                     <p class="stockV">{{ value }}</p>
-                </div>
-                <div class="stockValue">
-                    <a href="{{url_for('stock',name=key)}}"> Check Stock Prices</a>
                 </div>
             </div>
             {% endfor %}
