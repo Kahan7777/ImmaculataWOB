@@ -233,15 +233,13 @@ def home():
         isAuth2=True
         errorMessage = {"error":False}
         try:
-            if cont == False:
-                
+            if cont == False: 
                 errorMessage["error"] = True
                 errorMessage["eMess1"]="You are not allowed to enter information currently!"
                 errorMessage["eMess2"]="Ask the event head if this is a reccuring message!"
-                print("yhdsihdai")
+                return redirect(url_for("error",eMess1=errorMessage["eMess1"],eMess2=errorMessage["eMess2"]))
             if cont == True:
-                print("Oiujeufieufdhc")
-            print(cont)
+                pass
         except:
             pass
         try:
